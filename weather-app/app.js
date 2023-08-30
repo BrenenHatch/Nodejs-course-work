@@ -11,6 +11,7 @@ const apiKey = '1cnuAwbSbzd5Y4hd2GehUFOJUSDzla45';
 const location = '';
 const addressUrl = `https://api.tomtom.com/search/2/geocode/${encodeURIComponent(location)}.json?key=${apiKey}`;
 
+// Get weather data with lat lon
 request({ url: url, json: true }, (error, response) => {
     if(error){
         'Unable to connect to weather data'
@@ -21,6 +22,7 @@ request({ url: url, json: true }, (error, response) => {
     }
 })
 
+//Get lat and lon from an address
 request({ url: addressUrl, json: true }, (error, response) => {
     log(response.body.result)
     if (error){
