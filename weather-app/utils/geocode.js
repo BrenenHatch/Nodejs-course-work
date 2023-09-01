@@ -3,17 +3,17 @@ require('dotenv').config();
 
 const geocode = (address, callback) => {
     const apiKey = process.env.GEOCODE_API_KEY;
-    const addressUrl = `https://api.tomtom.com/search/2/geocode/${encodeURIComponent(address)}.json?key=${apiKey}`
-    request({ url: addressUrl, json: true }, (error, response) => {
+    const url = `https://api.tomtom.com/search/2/geocode/${encodeURIComponent(address)}.json?key=${apiKey}`
+    request({ url, json: true }, (error, { body }) => {
         if(error){
             callback('Unable to connect to geolocation data', undefined)
-        } else if (response.body.error){
+        } else if (!body.results){
             callback('Unable to find location')
         } else{
             callback(undefined, {
-                latitude: response.body.results[0].position.lat,
-                longtitude: response.body.results[0].position.lon,
-                location: response.body.results[0].address.freeformAddress
+                latitude: body.results[0].position.lat,
+                longitude: body.results[0].position.lon,
+                location: body.results[0].address.freeformAddress
             })  
         }
     })
