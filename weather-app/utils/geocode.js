@@ -1,7 +1,8 @@
 const request = require('request')
+require('dotenv').config();
 
 const geocode = (address, callback) => {
-    const apiKey = '1cnuAwbSbzd5Y4hd2GehUFOJUSDzla45'
+    const apiKey = process.env.GEOCODE_API_KEY;
     const addressUrl = `https://api.tomtom.com/search/2/geocode/${encodeURIComponent(address)}.json?key=${apiKey}`
     request({ url: addressUrl, json: true }, (error, response) => {
         if(error){
