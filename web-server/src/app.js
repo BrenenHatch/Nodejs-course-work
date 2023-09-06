@@ -1,6 +1,8 @@
 const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
+const geocode = require('./utils/geocode')
+const forecast = require('./utils/forecast')
 
 const app = express()
 
@@ -39,11 +41,46 @@ app.get('/help', (req, res) => {
     })
 })
 
+app.get('/cloud', (req, res) => {
+    res.render('cloud', {
+        title: 'About Me',
+        name: 'Brenen Hatch'
+    })
+})
+
 
 app.get('/weather', (req, res) => {
+    if (!req.query.address){
+        return res.send({
+            error: 'You must provide an address'
+        })
+    }
+    geocode(req.query.address, (geocodeError, { latitude, longitude, location } = {}) => {
+        if (geocodeError) {
+            return res.send({error: geocodeError});
+        } else {
+            forecast(latitude, longitude, (forecastError, forecastData) => {
+                if (forecastError) {
+                    return res.send({error: forecastError});
+                } else {
+                    res.send({
+                        forecast: forecastData,
+                        location,
+                    })
+                }
+            });
+        }
+    });
+})
+
+app.get('/products', (req,res) => {
+    if (!req.query.search){
+        return res.send({
+            error: 'You must provide a search term'
+        })
+    }
     res.send({
-        forecast: 'Sunny',
-        location: 'Orlando, FL'
+        products: []
     })
 })
 
