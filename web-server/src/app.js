@@ -101,7 +101,6 @@ app.get('*', (req, res) => {
     });
 });
 
-// Start the server with Render's port and keep-alive settings
 const server = app.listen(port, () => {
     console.log(`Server is up on port ${port}.`);
 });
